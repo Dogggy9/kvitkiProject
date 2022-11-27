@@ -2,8 +2,11 @@ import pathlib
 
 import pandas as pd
 
+from electr import Electr
 from finder import Finder
+from hot import Hot
 from pdf_reader import PdfReader
+from rostel import Rostel
 from sql import Sql
 
 dir_path = pathlib.Path.cwd()
@@ -14,6 +17,9 @@ NUM_FLOAT = r'( *\d+((.|,)\d+)?)'
 s = Sql(dir_path_base)
 # p = PdfReader()
 f = Finder()
+e = Electr()
+h = Hot()
+r = Rostel()
 finder = f.find
 
 # удалить таблицу
@@ -35,23 +41,23 @@ for path in dir_path_files.iterdir():
         pdf_document = path
         ex_page = PdfReader.reader(pdf_document)
         if 'ТГК-2 ЭНЕРГОСБЫТ' in ex_page[0]:
-            f.find_tgk2_energ(ex_page, mesto, mesto2)
-            s.in_base(f.query_create_table_electric_if_not_exists)
-            s.inserter(f.val)
-            df_e = pd.read_sql(f"select * from {f.val[0]}", s.con)
+            e.find_tgk2_energ(ex_page, mesto, mesto2)
+            s.in_base(e.query_create_table_electric_if_not_exists)
+            s.inserter(e.val)
+            df_e = pd.read_sql(f"select * from {e.val[0]}", s.con)
 
         elif 'www.lk.rt.ru' in ex_page[0]:
-            f.find_rostelekom(ex_page, mesto)
-            s.in_base(f.query_create_table_rostelekom_if_not_exists)
-            s.inserter(f.val)
-            df_ros = pd.read_sql(f"select * from {f.val[0]}", s.con)
+            r.find_rostelekom(ex_page, mesto)
+            s.in_base(r.query_create_table_rostelekom_if_not_exists)
+            s.inserter(r.val)
+            df_ros = pd.read_sql(f"select * from {r.val[0]}", s.con)
 
         elif 'ПАО "ТГК № 2"' in ex_page[0]:
-            f.find_tgk2_hot(ex_page, mesto)
+            h.find_tgk2_hot(ex_page, mesto)
 
-            s.in_base(f.query_create_table_tgk2_if_not_exists)
-            s.inserter(f.val)
-            df_tgk = pd.read_sql(f"select * from {f.val[0]}", s.con)
+            s.in_base(h.query_create_table_tgk2_if_not_exists)
+            s.inserter(h.val)
+            df_tgk = pd.read_sql(f"select * from {h.val[0]}", s.con)
 
         else:
             continue
