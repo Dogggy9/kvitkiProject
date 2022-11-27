@@ -14,5 +14,5 @@ class PdfReader:
 
 
 if __name__ == '__main__':
-    # p = PdfReader()
-    print(PdfReader.reader('D:\pythonProject\pdfProject\ee_2022_1.pdf'))
+    text = 'ee_2022_1.pdf'
+    print(PdfReader.reader(text))

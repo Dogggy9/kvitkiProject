@@ -1,10 +1,10 @@
 import sqlite3
 
+
 class Sql:
     def __init__(self, dir_path_base):
         self.con = sqlite3.connect(dir_path_base)
         self.cur = self.con.cursor()
-
 
     def table_exists(self, table_name):
         self.cur.execute(f"""SELECT count(name) FROM sqlite_master WHERE TYPE = 'table' AND name = '{table_name}'""")
@@ -26,7 +26,6 @@ class Sql:
         rows = self.out_base(f"SELECT rowid, * FROM {values[0]}")
         for row in rows:
             if values[1] in row:
-                # if int(values[1]) in row:
                 break
         else:
             # # Добавление данных
