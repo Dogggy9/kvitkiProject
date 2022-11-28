@@ -7,3 +7,4 @@
 /main.py
 /sql_query.sql
 /prosmotr.py
+*.pyc
