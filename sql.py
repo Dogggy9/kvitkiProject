@@ -1,4 +1,5 @@
 import sqlite3
+from sqlite3 import Error
 
 
 class Sql:
@@ -30,3 +31,13 @@ class Sql:
         else:
             # # Добавление данных
             self.in_base(f'''INSERT INTO {values[0]} VALUES {tuple(values[1:])}''')
+
+    def insert(self, values):
+        try:
+            self.in_base(f'''
+                insert into {tuple(values.values())[0]}{tuple(values.keys())[1:]} values {tuple(values.values())[1:]}
+                ''')
+        except sqlite3.IntegrityError:
+            print("ошибка primary key")
+            print("наверно такая строка уже есть")
+        # sqlite3.IntegrityError: UNIQUE constraint failed

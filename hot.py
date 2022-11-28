@@ -22,7 +22,7 @@ class Hot(Finder):
                                                     "горячая вода" real
                                                     )'''
 
-    def find_tgk2_hot(self, ex_page, mesto):
+    def find_tgk2_hot(self, ex_page, mesto: int):
         val = ['tgk2']
         total_area, mesto = self.find(mesto, ex_page[0], 'Общая площадь всех жилых и нежилых помещений: ', ' ')
         val.append(total_area)
@@ -51,9 +51,12 @@ class Hot(Finder):
         val.append(heating_total if heating_total.isdigit() else 0)
         gvs_total, mesto = self.find(mesto, ex_page[0], heating_total + ' ', ' ')
         val.append(gvs_total)
+        print(val)
         period, mesto = self.find(mesto, ex_page[0], 'водоснабжение за ', ' ', 2)
         val.insert(2, period)
+        print(period)
         month = period.split()[0]
+        print(month)
         mm = self.MONTH_DICT[month.lower()]
         val.insert(3, mm)
         year = period.split()[1]

@@ -23,15 +23,16 @@ r = Rostel()
 finder = f.find
 
 # удалить таблицу
-query_drop_table_electric = "DROP TABLE if exists electric"
-s.in_base(query_drop_table_electric)
-print("удаляем таблицу electric")
-query_drop_table_rostelekom = "DROP TABLE if exists rostelekom "
-s.in_base(query_drop_table_rostelekom)
-print("удаляем таблицу rostelekom")
-query_drop_table_tgk2 = "DROP TABLE if exists tgk2 "
-s.in_base(query_drop_table_tgk2)
-print("удаляем таблицу tgk2")
+if True:
+    query_drop_table_electric = "DROP TABLE if exists electric"
+    s.in_base(query_drop_table_electric)
+    print("удаляем таблицу electric")
+    query_drop_table_rostelekom = "DROP TABLE if exists rostelekom "
+    s.in_base(query_drop_table_rostelekom)
+    print("удаляем таблицу rostelekom")
+    query_drop_table_tgk2 = "DROP TABLE if exists tgk2 "
+    s.in_base(query_drop_table_tgk2)
+    print("удаляем таблицу tgk2")
 
 for path in dir_path_files.iterdir():
     print(path)
@@ -47,10 +48,14 @@ for path in dir_path_files.iterdir():
             df_e = pd.read_sql(f"select * from {e.val[0]}", s.con)
 
         elif 'www.lk.rt.ru' in ex_page[0]:
+            # r.find_rostel(ex_page, mesto)
             r.find_rostelekom(ex_page, mesto)
-            s.in_base(r.query_create_table_rostelekom_if_not_exists)
-            s.inserter(r.val)
-            df_ros = pd.read_sql(f"select * from {r.val[0]}", s.con)
+            s.in_base(r.query_create_table_rostelekom_dict)
+            # s.in_base(r.query_create_table_rostelekom_if_not_exists)
+            # print(r.val,'\n',r.ex_page)
+            # s.inserter(r.val)
+            s.insert(r.val_dict)
+            df_ros = pd.read_sql(f"select * from {tuple(r.val_dict.values())[0]}", s.con)
 
         elif 'ПАО "ТГК № 2"' in ex_page[0]:
             h.find_tgk2_hot(ex_page, mesto)
